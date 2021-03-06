@@ -8,6 +8,7 @@ use App\Models\Service_request;
 use App\Models\Employee_feedback;
 use App\Models\Order;
 use App\Models\Ordered_product;
+use App\Models\Billing_address;
 use App\Models\Setting;
 use Validator;
 use Redirect;
@@ -71,6 +72,8 @@ class ApiController extends Controller
      
      public function order(Request $request)
     {
+        
+       
         $validateData=Validator::make($request->all(),[
             "productid"=>"required",
             "itemprice"=>"required",
@@ -80,6 +83,9 @@ class ApiController extends Controller
             "user_id"=>"required",
             "address"=>"required",
             "product_weight"=>"required",
+            "order_no"=>"required",
+            
+
         ]);
 
         if($validateData->fails())
@@ -94,13 +100,42 @@ class ApiController extends Controller
             {
                 $admin_id=$s->admin_id;
             }
+            $user_id=$request->user_id;
             $order=new Order;
             $order->admin_id=$admin_id;
             $order->method=$request->method;
             $order->amount=$request->amount;
-            $order->user=$request->user_id;
+            $order->user=$user_id;
             $order->address=$request->address;
+            $order->order_no=$request->order_no;
             $s=$order->save();
+
+           
+            $bill_address=Billing_address::where('user',$user_id)->first();
+            if($bill_address)
+            {
+                $bill_address->line_1=$request->bill_line1;
+                $bill_address->line_2=$request->bill_line2;
+                $bill_address->city=$request->bill_city;
+                $bill_address->zip=$request->bill_zip;
+                $bill_address->state=$request->bill_state;
+                $bill_address->country=$request->bill_country;
+                $bill_address->save();
+
+            }
+            else{
+                $bill_address=new Billing_address;
+                $bill_address->user=$user_id;
+                $bill_address->line_1=$request->bill_line1;
+                $bill_address->line_2=$request->bill_line2;
+                $bill_address->city=$request->bill_city;
+                $bill_address->zip=$request->bill_zip;
+                $bill_address->state=$request->bill_state;
+                $bill_address->country=$request->bill_country;
+                $bill_address->save();
+            }
+
+            
             
             $pro_id=$request->productid;
             $c=count($pro_id);
