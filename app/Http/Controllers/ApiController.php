@@ -9,6 +9,7 @@ use App\Models\Employee_feedback;
 use App\Models\Order;
 use App\Models\Ordered_product;
 use App\Models\Billing_address;
+use App\Models\Point;
 use App\Models\Setting;
 use Validator;
 use Redirect;
@@ -134,6 +135,23 @@ class ApiController extends Controller
                 $bill_address->country=$request->bill_country;
                 $bill_address->save();
             }
+
+            $point=Point::where('user_id',$user_id)->first();
+            if($point)
+            {
+                $available_point=$point->points;
+                $point->points=$available_point+10;
+                $point->save();
+            }
+            else{
+                $point=new Point;
+                $point->user_id=$user_id;
+                $point->points=10;
+                $point->save();
+
+            }
+
+
 
             
             
