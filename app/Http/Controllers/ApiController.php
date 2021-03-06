@@ -19,6 +19,7 @@ class ApiController extends Controller
 {
 
     
+    
     public function add_case(Request $request)
     {
         $case=new Cases;
