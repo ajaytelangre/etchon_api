@@ -7,6 +7,7 @@ use App\Models\Cases;
 use App\Models\Service_request;
 use App\Models\Employee_feedback;
 use App\Models\Order;
+use App\Models\User;
 use App\Models\Ordered_product;
 use App\Models\Billing_address;
 use App\Models\Point;
@@ -19,7 +20,32 @@ class ApiController extends Controller
 {
 
     
-    
+    public function set_gstin(Request $request)
+    {
+        $validateData=Validator::make($request->all(),[
+          
+            "user_id"=>"required",
+            "gstin"=>"required"
+        ]);
+
+        if($validateData->fails())
+        {
+            return response()->json([
+                "message" => 'validation fail',
+                ]);
+        }
+        else{
+            $id=$request->user_id;
+            $user=User::find($id);
+            $user->gstin=$request->gstin;
+            $user->save();
+            return response()->json([
+                "message"=>"Data updated"
+            ]);
+        }
+
+    }
+
     public function add_case(Request $request)
     {
         $case=new Cases;
