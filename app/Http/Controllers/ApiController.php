@@ -15,6 +15,7 @@ use App\Models\Setting;
 use Validator;
 use Redirect;
 use DB;
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
@@ -135,6 +136,7 @@ class ApiController extends Controller
             $order->method=$request->method;
             $order->amount=$request->amount;
             $order->user=$user_id;
+            $order->time=Carbon::now();
             $order->address=$request->address;
             $order->order_no=$request->order_no;
             $s=$order->save();
