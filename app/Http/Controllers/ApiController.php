@@ -20,7 +20,28 @@ use Carbon\Carbon;
 class ApiController extends Controller
 {
 
-    
+    public function get_points(Request $request)
+    {
+        $validateData=Validator::make($request->all(),[
+          
+            "user_id"=>"required",
+        ]);
+
+        if($validateData->fails())
+        {
+            return response()->json([
+                "message" => 'validation fail',
+                ]);
+        }
+        else{
+            $id=$request->user_id;
+            $points=Point::where("user_id",$id)->select('points')->first();
+            return $points;
+        }
+
+        
+    }
+
     public function set_gstin(Request $request)
     {
         $validateData=Validator::make($request->all(),[
