@@ -191,7 +191,7 @@ class ApiController extends Controller
             if($point)
             {
                 $available_point=$point->points;
-                $point->points=$available_point+10;
+                $point->points=(int)$available_point+10;
                 $point->save();
             }
             else{
