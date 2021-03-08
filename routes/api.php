@@ -30,5 +30,6 @@ Route::get('/user_show_case',[ApiController::class,'user_show_case']);
 Route::post('/order',[ApiController::class,'order']);
 Route::post('/set_gstin',[ApiController::class,'set_gstin']);
 Route::post('/get_points',[ApiController::class,'get_points']);
+Route::post('/get_bill_address',[ApiController::class,'get_bill_address']);
 
 
