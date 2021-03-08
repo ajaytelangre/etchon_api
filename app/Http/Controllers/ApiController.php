@@ -200,6 +200,8 @@ class ApiController extends Controller
                 $bill_address->country=$request->bill_country;
                 $bill_address->save();
 
+                
+
             }
             else{
                 $bill_address=new Billing_address;
@@ -216,8 +218,17 @@ class ApiController extends Controller
             $point=Point::where('user_id',$user_id)->first();
             if($point)
             {
+                $r_points=$request->redeem_point;
                 $available_point=$point->points;
-                $point->points=(int)$available_point+10;
+                if($r_points)
+                {
+                    $final_point=(int)$available_point-(int)$r_points;
+                    $point->points=(int)$final_point+10;
+                }
+                else{
+                    $point->points=(int)$available_point+10;
+                }
+               
                 $point->save();
             }
             else{
