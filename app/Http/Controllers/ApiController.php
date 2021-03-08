@@ -19,6 +19,32 @@ use Carbon\Carbon;
 
 class ApiController extends Controller
 {
+    public function get_bill_address(Request $request)
+    {
+        $validateData=Validator::make($request->all(),[
+          
+            "user_id"=>"required",
+        ]);
+
+        if($validateData->fails())
+        {
+            return response()->json([
+                "message" => 'validation fail',
+                ]);
+        }
+        else{
+            $id=$request->user_id;
+       
+            $bill_address = DB::table('billing_address')
+            ->join('user','billing_address.user','=', 'user.id',  )
+            ->select('billing_address.*', 'user.phone','user.gstin')
+            ->where('billing_address.user',$id)
+            ->get();
+            return $bill_address;
+
+        }
+    }
+
 
     public function get_points(Request $request)
     {
