@@ -40,7 +40,22 @@ class ApiController extends Controller
             ->select('billing_address.*', 'user.phone','user.gstin')
             ->where('billing_address.user',$id)
             ->get();
-            return $bill_address;
+
+            $data=[];
+            foreach($bill_address as $bill)
+            {
+                $data["id"]=$bill->id;
+                $data["user"]=$bill->user;
+                $data["line_1"]=$bill->line_1;
+                $data["line_2"]=$bill->line_2;
+                $data["city"]=$bill->city;
+                $data["zip"]=$bill->zip;
+                $data["state"]=$bill->state;
+                $data["country"]=$bill->country;
+                $data["phone"]=$bill->phone;
+                $data["gstin"]=$bill->gstin;
+            }
+            return $data;
 
         }
     }
